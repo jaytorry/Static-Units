@@ -1,9 +1,6 @@
 {
   "name": "Static-Units",
   "keywords": ["pi-package"],
-  "dependencies": {
-    "@jerryan/pi-pyvenv": "^0.1.2"
-  },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "^0.86.1"
   },
@@ -14,6 +11,6 @@
   ],
   "pi": {
     "skills": ["./skills"],
-    "extensions": ["./extensions/pi-static-units.ts", "./node_modules/@jerryan/pi-pyvenv/src"]
+    "extensions": ["./extensions/pi-static-units.ts"]
   }
 }

@@ -36,6 +36,8 @@ export default function (pi: ExtensionAPI) {
       if (event.toolName === "write" || event.toolName === "edit") {
         if (path.extname(String(event.input.path)).toLowerCase() === ".py") {
           /** Install Python dependencies */
+          /** Important: The current default pip location will be used 
+              To install to a venv, activate in terminal before launching pi */
           if (!requirements_installed) {
             const cmd = `pip install --no-cache-dir -r ${python_requirements}`;
             try {
