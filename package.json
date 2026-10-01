@@ -1,5 +1,5 @@
 {
-  "name": "static-units",
+  "name": "Static-Units",
   "keywords": ["pi-package"],
   "dependencies": {
     "@jerryan/pi-pyvenv": "^0.1.2"
@@ -9,8 +9,11 @@
   },
   "files": [
     "skills",
-    "prompts",
-    "scripts",
-    "extensions"
-  ]
+    "extensions",
+    "resources"
+  ],
+  "pi": {
+    "skills": ["./skills"],
+    "extensions": ["./extensions/pi-static-units.ts", "./node_modules/@jerryan/pi-pyvenv/src"]
+  }
 }
