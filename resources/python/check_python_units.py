@@ -42,7 +42,7 @@ import logging
 import sys
 
 
-def check_units(fcn: function, message_handler: ImpunityMessageHandler):
+def check_units(fcn, message_handler):
   """ 
   Checks the units of a single Python function
   Args:
@@ -83,7 +83,7 @@ class ImpunityMessageHandler(logging.StreamHandler):
     print(record.getMessage().replace(" Fallback to dimensionless",""))
 
 
-def import_module(source_path: str):
+def import_module(source_path):
     """ boilerplate: imports module from source path """
     module_spec = spec_from_file_location("source_module", source_path)
     source_module = module_from_spec(module_spec)
