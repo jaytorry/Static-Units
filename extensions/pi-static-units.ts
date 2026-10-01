@@ -12,12 +12,11 @@ export default function (pi: ExtensionAPI) {
   const python_requirements = `${resources}/python/requirements.txt`
   const prompt_file = `${resources}/prompts/units-with-automated-check.md`
 
-  pi.on("resources_discover", async (event, ctx) => {
+  pi.on("session_start", async (event, ctx) => {
     /**
       Install Python dependencies for the static units checker
-      A suitable venv should already have been activated by 
-      the pi-pyvenv package in session_start. 
-      https://pi.dev/packages/@jerryan/pi-pyvenv 
+      Important: The current default pip location will be used 
+      To use a venv, activate in terminal before launching pi
     */
     if (extension_active) {
       const cmd = `pip install --no-cache-dir -r ${python_requirements}`;
