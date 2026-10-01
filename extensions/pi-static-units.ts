@@ -3,14 +3,14 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { execSync } from "node:child_process";
 import path from "node:path"; import fs from "node:fs";
 
-const prompt_file = "prompts/units-with-automated-check.md"
-const units_checker = "scripts/check_python_units.py"
-const python_requirements = "scripts/requirements.txt"
-
-
 export default function (pi: ExtensionAPI) {
 
   let extension_active = true;
+
+  const resources = `${path.dirname(__dirname)}/resources`
+  const units_checker = `${resources}/python/check_python_units.py`
+  const python_requirements = `${resources}/python/requirements.txt`
+  const prompt_file = `${resources}/prompts/units-with-automated-check.md`
 
   pi.on("resources_discover", async (event, ctx) => {
     /**
@@ -20,7 +20,7 @@ export default function (pi: ExtensionAPI) {
       https://pi.dev/packages/@jerryan/pi-pyvenv 
     */
     if (extension_active) {
-      const cmd = `pip install --no-cache-dir -r ${ctx.cwd}/${python_requirements}`;
+      const cmd = `pip install --no-cache-dir -r ${python_requirements}`;
       try {
         const response = execSync(cmd).toString();
         ctx.ui.notify(`Extension static-units: Installing Python dependencies ...\n${cmd}\n${response}`);
@@ -36,7 +36,7 @@ export default function (pi: ExtensionAPI) {
     /** Inject units-specific system prompt */
     if (extension_active) {
       try {
-        const units_prompt = fs.readFileSync(`${ctx.cwd}/${prompt_file}`);
+        const units_prompt = fs.readFileSync(prompt_file);
         ctx.ui.notify(`Extension static-units: Injecting system prompt:\n<units>\n${units_prompt}</units>`);
         event.systemPromptOptions.appendSystemPrompt = `<units>\n${units_prompt}</units>`;
       } catch (err: any) {
@@ -53,7 +53,7 @@ export default function (pi: ExtensionAPI) {
       try {
         if (event.toolName === "write" || event.toolName === "edit") {
           if (path.extname(String(event.input.path)).toLowerCase() === ".py") {
-            const cmd = `python ${ctx.cwd}/${units_checker} ${event.input.path}`;
+            const cmd = `python ${units_checker} ${event.input.path}`;
             const checker_output = execSync(cmd);  // run the checker
             ctx.ui.notify(checker_output.toString());
             return {  // add checker output to context
