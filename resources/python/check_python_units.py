@@ -34,7 +34,7 @@ from impunity import impunity
 
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
-from inspect import getmembers, isfunction, isclass
+from inspect import getmembers, isfunction, isclass, getmodule
 
 import pint
 import argparse
@@ -64,7 +64,7 @@ def check_units(fcn, message_handler):
     print(f"{type(e).__name__}: {e}")
   else:
     if message_handler.message_count > 0:
-      print(f"Please resolve the {message_handler.message_count} problems highlighted above")
+      print(f"Please resolve {message_handler.message_count} problems reported above")
     else:
       print("OK")
 
@@ -94,9 +94,10 @@ def import_module(source_path):
 
 def get_fcns(module):
   """ lists all top-level functions and class methods in module """
-  fcns = [f[1] for f in getmembers(module, isfunction)]
+  fcns = [f[1] for f in getmembers(module, isfunction) if getmodule(f[1]) is module]
   for c in getmembers(module, isclass):
-    fcns += [f[1] for f in getmembers(c[1], isfunction)]
+    if getmodule(c[1]) is module:
+      fcns += [f[1] for f in getmembers(c[1], isfunction)]
   return fcns
 
 
